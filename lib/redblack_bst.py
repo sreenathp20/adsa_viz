@@ -59,14 +59,31 @@ class RBT:
             return
         parent = node.parent
         grandparent = parent.parent
-        if grandparent.left != self.NIL_LEAF and grandparent.left.key == parent.key:
+        if grandparent.left != self.NIL_LEAF and grandparent.left == parent:
             uncle = grandparent.right
-        if grandparent.right != self.NIL_LEAF and grandparent.right.key == parent.key:
-            uncle = grandparent.left
+        if grandparent.right != self.NIL_LEAF and grandparent.right == parent:
+            uncle = grandparent.left  # parent is right child
+            if parent.right != self.NIL_LEAF and node == parent.right:
+                self.left_rotate(parent)
         if uncle == self.NIL_LEAF or uncle.is_black():
             if parent.left != self.NIL_LEAF and node.key == parent.left.key:
                 if grandparent.left != self.NIL_LEAF and parent.key == grandparent.left.key:
-                    
+                    pass
+
+    def left_rotate(self, x):
+        parent = x.parent
+        y = x.right
+        if parent != self.NIL_LEAF and parent.parent.left == parent:
+            parent.parent.left = x
+        if parent != self.NIL_LEAF and parent.parent.right == parent:
+            parent.parent.right = x
+        x.parent = parent.parent
+        parent.right = x.left
+        if x.left != self.NIL_LEAF:
+            x.left.parent = parent
+        x.left = parent
+        parent.parent = x
+
 
 class RedBlackTree:
 
@@ -187,6 +204,7 @@ class RedBlackTree:
 if __name__ == "__main__":
     rbt = RedBlackTree()
     keys = [20, 15, 25, 10, 5, 1, 30, 35, 40]
+    keys = [10, 18, 7, 15, 16, 30, 25, 40, 60, 2, 1, 70]
     for key in keys:
         rbt.insert(key)
 
