@@ -1,0 +1,42 @@
+<div>
+    <mat-grid-list cols="4" rowHeight="100px">
+        @for (tile of tiles; track tile) {  
+      <mat-grid-tile
+        [colspan]="tile.cols"
+        [rowspan]="tile.rows"
+        [style.background]="tile.color">{{tile.text}}
+            <div class="example-button-container">
+            <button matButton="elevated" (click)="formControl.disable()">Disable form control</button>
+            <button matButton="elevated" (click)="formControl.enable()">Enable form control</button>
+            </div>
+            <p>
+            <em>Enter video keywords</em>
+            </p>
+            <mat-form-field class="example-form-field">
+            <mat-label>Video keywords</mat-label>
+            <mat-chip-grid #chipGrid aria-label="Enter keywords" [formControl]="formControl">
+                @for (keyword of keywords(); track keyword) {
+                <mat-chip-row (removed)="removeKeyword(keyword)">
+                    {{keyword}}
+                    <button matChipRemove [attr.aria-label]="'remove ' + keyword">
+                    <mat-icon>cancel</mat-icon>
+                    </button>
+                </mat-chip-row>
+                }
+            </mat-chip-grid>
+            <input
+                placeholder="New keyword..."
+                [matChipInputFor]="chipGrid"
+                (matChipInputTokenEnd)="add($event)"
+            />
+            </mat-form-field>
+
+            <p><strong>The following keywords are entered:</strong> {{formControl.value}}</p>
+
+    
+    
+    </mat-grid-tile>
+        }
+    </mat-grid-list>
+</div>
+
